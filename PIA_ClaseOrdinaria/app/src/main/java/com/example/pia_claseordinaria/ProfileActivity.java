@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,6 +21,7 @@ public class ProfileActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ImageButton buttonConfig;
+    private MaterialCardView cardAccessControl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         buttonConfig = findViewById(R.id.buttonConfig);
+        cardAccessControl = findViewById(R.id.cardAccessControl);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -37,6 +40,14 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.openDrawer(GravityCompat.END);
+            }
+        });
+
+        // Configurar el click en Control de Acceso
+        cardAccessControl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ProfileActivity.this, AccessActivity.class));
             }
         });
 
@@ -50,9 +61,6 @@ public class ProfileActivity extends AppCompatActivity {
         Button btnRegisterAdmin = findViewById(R.id.nav_register_admin);
         Button btnLogout = findViewById(R.id.nav_logout);
 
-        // Lógica para mostrar "Registrar Admin" solo si es admin
-        // NOTA: Para producción, esto debería validarse con roles en Firestore o Custom Claims.
-        // Por ahora, usaremos una lógica simple: si el correo contiene "admin", se muestra.
         if (user != null && user.getEmail() != null && user.getEmail().contains("admin")) {
             btnRegisterAdmin.setVisibility(View.VISIBLE);
         } else {

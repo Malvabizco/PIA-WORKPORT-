@@ -1,6 +1,7 @@
 package com.example.pia_claseordinaria;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -86,10 +87,12 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null) {
                                 user.sendEmailVerification();
-                                Toast.makeText(RegisterActivity.this, "¡Administrador registrado con éxito! Por favor revisa tu correo para verificar la cuenta.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this, "¡Administrador registrado con éxito! Por favor revisa tu correo.", Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            Toast.makeText(RegisterActivity.this, "¡Error al registrar administrador! Inténtalo de nuevo.", Toast.LENGTH_LONG).show();
+                            String error = task.getException() != null ? task.getException().getMessage() : "Error desconocido";
+                            Log.e("FirebaseAuth", "Error de registro: " + error);
+                            Toast.makeText(RegisterActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
                         }
                     }
                 });

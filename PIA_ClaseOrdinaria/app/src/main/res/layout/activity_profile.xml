@@ -77,10 +77,13 @@
 
                 <!-- Control de Acceso -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardAccessControl"
                     android:layout_width="0dp"
                     android:layout_height="120dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
                     <TextView
@@ -97,6 +100,7 @@
 
                 <!-- Reservaciones -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardReservations"
                     android:layout_width="0dp"
                     android:layout_height="120dp"
                     android:layout_columnWeight="1"
@@ -117,6 +121,7 @@
 
                 <!-- Pagos -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardPayments"
                     android:layout_width="0dp"
                     android:layout_height="120dp"
                     android:layout_columnWeight="1"
@@ -137,6 +142,7 @@
 
                 <!-- Comunicados -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardNews"
                     android:layout_width="0dp"
                     android:layout_height="120dp"
                     android:layout_columnWeight="1"
@@ -157,6 +163,7 @@
 
                 <!-- Encuestas -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardPolls"
                     android:layout_width="0dp"
                     android:layout_height="120dp"
                     android:layout_columnWeight="1"
@@ -177,6 +184,7 @@
 
                 <!-- Quejas -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardIssues"
                     android:layout_width="0dp"
                     android:layout_height="120dp"
                     android:layout_columnWeight="1"

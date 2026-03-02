@@ -2,6 +2,7 @@ package com.example.pia_claseordinaria;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mAuth = FirebaseAuth.getInstance();
 
-        // Si ya hay una sesión activa, ir directo al perfil
         if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified()) {
             startActivity(new Intent(this, ProfileActivity.class));
             finish();
@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                     if (user != null && user.isEmailVerified()) {
-                        // Redirigir al perfil
                         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                         finish();
                     } else {
@@ -98,7 +97,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 } else {
-                    Toast.makeText(MainActivity.this, "¡Error al iniciar sesión! Por favor revisa tus credenciales", Toast.LENGTH_LONG).show();
+                    // Muestra el error real de Firebase para diagnóstico
+                    String errorMessage = task.getException() != null ? task.getException().getMessage() : "Error desconocido";
+                    Log.e("FirebaseAuth", "Error de login: " + errorMessage);
+                    Toast.makeText(MainActivity.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
                 }
             }
         });
