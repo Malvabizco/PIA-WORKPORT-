@@ -6,7 +6,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.ViewHolder> {
@@ -20,15 +23,28 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_2, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.complaint_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Map<String, Object> complaint = complaints.get(position);
-        holder.text1.setText(String.valueOf(complaint.get("usuario")));
-        holder.text2.setText(String.valueOf(complaint.get("mensaje")));
+        holder.textViewUser.setText(String.valueOf(complaint.get("usuario")));
+        holder.textViewMessage.setText(String.valueOf(complaint.get("mensaje")));
+        
+        Object timestamp = complaint.get("fecha");
+        if (timestamp != null) {
+            try {
+                long timeMillis = (long) timestamp;
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+                holder.textViewDate.setText(sdf.format(new Date(timeMillis)));
+            } catch (Exception e) {
+                holder.textViewDate.setText("");
+            }
+        } else {
+            holder.textViewDate.setText("");
+        }
     }
 
     @Override
@@ -37,11 +53,12 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView text1, text2;
+        TextView textViewUser, textViewMessage, textViewDate;
         public ViewHolder(View itemView) {
             super(itemView);
-            text1 = itemView.findViewById(android.R.id.text1);
-            text2 = itemView.findViewById(android.R.id.text2);
+            textViewUser = itemView.findViewById(R.id.textViewUser);
+            textViewMessage = itemView.findViewById(R.id.textViewMessage);
+            textViewDate = itemView.findViewById(R.id.textViewDate);
         }
     }
 }
