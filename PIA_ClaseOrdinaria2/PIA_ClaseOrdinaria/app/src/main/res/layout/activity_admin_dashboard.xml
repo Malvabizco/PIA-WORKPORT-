@@ -4,48 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_light_background"
+    android:background="#F8F9FA"
     android:fitsSystemWindows="true"
     tools:context=".AdminDashboardActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:elevation="0dp">
+        android:background="@android:color/white"
+        app:elevation="4dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:layout_height="?attr/actionBarSize"
+            android:paddingHorizontal="16dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:src="@drawable/ic_house"
                     app:tint="@color/md_theme_light_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:text="Admin Panel"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
                     android:textColor="@color/md_theme_light_primary"
-                    android:layout_marginStart="12dp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <ImageButton
                 android:id="@+id/buttonLogout"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_lock_power_off"
                 app:tint="@color/md_theme_light_error" />
@@ -67,9 +69,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Gestión del Condominio"
-                android:textSize="18sp"
-                android:layout_marginBottom="16dp"
-                android:textColor="@color/md_theme_light_secondary" />
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp"
+                android:textColor="#555555"
+                android:textStyle="bold" />
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -77,175 +80,152 @@
                 android:columnCount="2"
                 android:alignmentMode="alignMargins">
 
-                <!-- Usuarios Pendientes -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardPendingUsers"
                     android:layout_width="0dp"
-                    android:layout_height="160dp"
+                    android:layout_height="140dp"
                     android:layout_columnWeight="1"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:layout_margin="6dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="3dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:background="#E3F2FD"
-                        android:padding="16dp">
+                        android:background="#E3F2FD">
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:src="@drawable/ic_person"
                             app:tint="#1976D2" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Usuarios\nPendientes"
-                            android:gravity="center"
+                            android:text="Pendientes"
                             android:layout_marginTop="8dp"
                             android:textStyle="bold"
                             android:textColor="#1976D2" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Registrar Usuario -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardRegisterUser"
                     android:layout_width="0dp"
-                    android:layout_height="160dp"
+                    android:layout_height="140dp"
                     android:layout_columnWeight="1"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:layout_margin="6dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="3dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:background="#E8F5E9"
-                        android:padding="16dp">
+                        android:background="#E8F5E9">
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:src="@drawable/ic_phone"
                             app:tint="#388E3C" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Registrar\nNuevo User"
-                            android:gravity="center"
+                            android:text="Registrar"
                             android:layout_marginTop="8dp"
                             android:textStyle="bold"
                             android:textColor="#388E3C" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Publicar Aviso -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardPostAnnouncement"
                     android:layout_width="0dp"
-                    android:layout_height="160dp"
+                    android:layout_height="140dp"
                     android:layout_columnWeight="1"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:layout_margin="6dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="3dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:background="#FFF3E0"
-                        android:padding="16dp">
+                        android:background="#FFF3E0">
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:src="@drawable/ic_email"
                             app:tint="#F57C00" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Publicar\nAviso"
-                            android:gravity="center"
+                            android:text="Avisos"
                             android:layout_marginTop="8dp"
                             android:textStyle="bold"
                             android:textColor="#F57C00" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Quejas de Residentes -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardViewComplaints"
                     android:layout_width="0dp"
-                    android:layout_height="160dp"
+                    android:layout_height="140dp"
                     android:layout_columnWeight="1"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:layout_margin="6dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="3dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:background="#FFEBEE"
-                        android:padding="16dp">
+                        android:background="#FFEBEE">
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:src="@drawable/ic_house"
                             app:tint="#D32F2F" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Buzón de\nQuejas"
-                            android:gravity="center"
+                            android:text="Quejas"
                             android:layout_marginTop="8dp"
                             android:textStyle="bold"
                             android:textColor="#D32F2F" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-            </GridLayout>
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardSecurityChat"
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="3dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="#F3E5F5">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@android:drawable/stat_notify_chat"
+                            app:tint="#7B1FA2" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chat Seguridad"
+                            android:layout_marginTop="8dp"
+                            android:textStyle="bold"
+                            android:textColor="#7B1FA2" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-            <!-- Resumen de Actividad -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Estado del Sistema"
-                        android:textStyle="bold"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Base de Datos: Online"
-                        android:textColor="#2E7D32"
-                        android:layout_marginTop="4dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Seguridad: Encriptación Activa"
-                        android:layout_marginTop="2dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </GridLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

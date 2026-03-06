@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,14 +41,16 @@ import java.util.Map;
 
 public class GuardDashboardActivity extends AppCompatActivity {
 
-    private MaterialCardView cardScanQR;
+    private MaterialCardView cardScanQR, cardSecurityChat;
     private ImageButton buttonLogout;
     private MaterialButton buttonFilterDate;
+    private TextInputEditText editTextSearchEmail;
     private TextView textViewEmpty;
     private FirebaseFirestore db;
     private RecyclerView recyclerViewScanned;
     private ScannedAccessAdapter adapter;
     private List<Map<String, String>> scannedList;
+    private List<Map<String, String>> fullList;
     private static final String CHANNEL_ID = "access_notification_channel";
     private String selectedFilterDate;
 
@@ -65,28 +70,59 @@ public class GuardDashboardActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         cardScanQR = findViewById(R.id.cardScanQR);
+        cardSecurityChat = findViewById(R.id.cardSecurityChat);
         buttonLogout = findViewById(R.id.buttonLogout);
         buttonFilterDate = findViewById(R.id.buttonFilterDate);
+        editTextSearchEmail = findViewById(R.id.editTextSearchEmail);
         textViewEmpty = findViewById(R.id.textViewEmpty);
         recyclerViewScanned = findViewById(R.id.recyclerViewScanned);
 
         scannedList = new ArrayList<>();
+        fullList = new ArrayList<>();
         adapter = new ScannedAccessAdapter(scannedList);
         recyclerViewScanned.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewScanned.setAdapter(adapter);
 
-        // Por defecto, cargar historial de hoy
         selectedFilterDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         loadHistoryByDate(selectedFilterDate);
 
         cardScanQR.setOnClickListener(v -> startQRScanner());
+        cardSecurityChat.setOnClickListener(v -> startActivity(new Intent(this, ChatActivity.class)));
         buttonFilterDate.setOnClickListener(v -> showDatePicker());
+
+        editTextSearchEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterListByEmail(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         buttonLogout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, MainActivity.class));
             finish();
         });
+    }
+
+    private void filterListByEmail(String text) {
+        scannedList.clear();
+        if (text.isEmpty()) {
+            scannedList.addAll(fullList);
+        } else {
+            String query = text.toLowerCase().trim();
+            for (Map<String, String> item : fullList) {
+                String email = item.get("email");
+                if (email != null && email.toLowerCase().contains(query)) {
+                    scannedList.add(item);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+        textViewEmpty.setVisibility(scannedList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     private void showDatePicker() {
@@ -108,6 +144,7 @@ public class GuardDashboardActivity extends AppCompatActivity {
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    fullList.clear();
                     scannedList.clear();
                     if (queryDocumentSnapshots.isEmpty()) {
                         textViewEmpty.setVisibility(View.VISIBLE);
@@ -119,10 +156,7 @@ public class GuardDashboardActivity extends AppCompatActivity {
                         }
                     }
                 })
-                .addOnFailureListener(e -> {
-                    // Si falla por falta de índice compuesto, intentamos sin ordenación de Firestore
-                    loadHistoryWithoutOrder(date);
-                });
+                .addOnFailureListener(e -> loadHistoryWithoutOrder(date));
     }
 
     private void loadHistoryWithoutOrder(String date) {
@@ -131,6 +165,7 @@ public class GuardDashboardActivity extends AppCompatActivity {
                 .whereEqualTo("status", "AUTORIZADO")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    fullList.clear();
                     scannedList.clear();
                     if (queryDocumentSnapshots.isEmpty()) {
                         textViewEmpty.setVisibility(View.VISIBLE);
@@ -158,9 +193,13 @@ public class GuardDashboardActivity extends AppCompatActivity {
                     scanData.put("phone", userDoc.getString("phone") != null ? userDoc.getString("phone") : "N/A");
                     scanData.put("time", date + " " + time);
 
-                    scannedList.add(scanData);
-                    // Ordenar localmente por si acaso
-                    adapter.notifyDataSetChanged();
+                    fullList.add(scanData);
+                    if (editTextSearchEmail.getText().toString().isEmpty()) {
+                        scannedList.add(scanData);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        filterListByEmail(editTextSearchEmail.getText().toString());
+                    }
                 });
     }
 
@@ -232,13 +271,7 @@ public class GuardDashboardActivity extends AppCompatActivity {
                                     .update("status", "AUTORIZADO")
                                     .addOnSuccessListener(aVoid -> {
                                         showNotification("Acceso Autorizado", "Un nuevo usuario ha ingresado al recinto.");
-                                        // Recargar la lista si el acceso es de hoy
-                                        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                                        if (selectedFilterDate.equals(today)) {
-                                            loadHistoryByDate(today);
-                                        } else {
-                                            Toast.makeText(this, "¡Acceso Autorizado! (Vea el historial de hoy)", Toast.LENGTH_SHORT).show();
-                                        }
+                                        loadHistoryByDate(selectedFilterDate);
                                     });
                         } else {
                             Toast.makeText(this, "Código no válido o ya utilizado", Toast.LENGTH_LONG).show();

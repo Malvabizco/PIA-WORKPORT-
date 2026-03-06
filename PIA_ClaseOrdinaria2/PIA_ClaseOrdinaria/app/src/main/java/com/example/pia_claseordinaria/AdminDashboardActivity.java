@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
-    private MaterialCardView cardPendingUsers, cardRegisterUser, cardPostAnnouncement, cardViewComplaints;
+    private MaterialCardView cardPendingUsers, cardRegisterUser, cardPostAnnouncement, cardViewComplaints, cardSecurityChat;
     private ImageButton buttonLogout;
 
     @Override
@@ -21,7 +21,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
-        // SOLUCIÓN GLOBAL AL SOLAPAMIENTO
         View mainView = findViewById(android.R.id.content);
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -33,13 +32,14 @@ public class AdminDashboardActivity extends AppCompatActivity {
         cardRegisterUser = findViewById(R.id.cardRegisterUser);
         cardPostAnnouncement = findViewById(R.id.cardPostAnnouncement);
         cardViewComplaints = findViewById(R.id.cardViewComplaints);
+        cardSecurityChat = findViewById(R.id.cardSecurityChat);
         buttonLogout = findViewById(R.id.buttonLogout);
 
-        // LINKS CORRECTOS A PANTALLAS DE ADMIN
         cardPendingUsers.setOnClickListener(v -> startActivity(new Intent(this, PendingUsersActivity.class)));
         cardRegisterUser.setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
         cardPostAnnouncement.setOnClickListener(v -> startActivity(new Intent(this, AdminPostAnnouncementActivity.class)));
         cardViewComplaints.setOnClickListener(v -> startActivity(new Intent(this, AdminComplaintsActivity.class)));
+        cardSecurityChat.setOnClickListener(v -> startActivity(new Intent(this, ChatActivity.class)));
 
         buttonLogout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
